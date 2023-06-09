@@ -18,11 +18,6 @@ address:
     address: Aix Marseille Universite, CNRS, LNC, Laboratoire de Neurosciences Cognitives, Marseille, France
   - code: INT 
     address: Aix Marseille Universite, CNRS, INT, Institut de Neurosciences de la Timone, Marseille, France
-footnote:
-  - code: 1
-    text: "This is the first author footnote."
-  - code: 2
-    text: "Another author footnote."
 abstract: |
   This is the abstract.
 
@@ -64,11 +59,36 @@ library(knitr)
 library(kableExtra) ##https://haozhu233.github.io/kableExtra/awesome_table_in_pdf.pdf
 
 
-load("../preprocessing.RData")  # Charger le fichier .RData
+load("../NetworkAnalyseTOUT.RData")  # Charger le fichier .RData
 
 ```
 
+
+
+
 # Introduction
+
+
+-	Adams 2022 The role of interoception in the overlap between eating disorders and autism: Methodological considerations
+
+-	Murphy 2017 Interoception and psychopathology: A developmental neuroscience perspective 
+
+
+
+sex difference  : 
+
+-	Murphy 2019 Does Atypical Interoception Following Physical Change Contribute to Sex Differences in Mental Illness?
+
+-	 Prentice 2022b  Gender differences in interoceptive accuracy and emotional ability: An explanation for incompatible findings ==> "Here we extend Pennebaker and Roberts’ (1992) theory of gender
+differences in the use of interoceptive signals for emotional experience, proposing that language socialisation
+may result in gender differences in the propensity to label internal state changes as physiological or emotional,
+respectively. Despite outstanding questions concerning the fractionation of interoceptive and emotional domains,
+this theory provides a plausible explanation for seemingly incompatible findings of gender differences in
+interoceptive and emotional abilities.
+
+-	Prentice 2022 Sex differences in interoceptive accuracy: A meta-analysis
+
+
 
 \newpage
 
@@ -80,7 +100,7 @@ We conducted a voluntary and anonymous online survey accessible on limesurvey be
 
 ## Measures
 
-The whole survey was composed of general information, scales, and subscales previously validated, as well as two subscales constructed based on questions from validated scales (Social Touch and Movement Seeking). All scales that required answers on a Likert scale were converted to a 5-point scale (ranging from 1 to 5) to facilitate the completion of the survey. All questions were forced-choice (except for the Resistance to Peer Influence questionnaire), but participants had the option to answer "I do not wish to answer" or "I do not understand the question". They were also invited to leave any comments/remarks at the end of the questionnaire. To gather information about survey distribution, we collected data on how individuals enrolled in the study and their postal codes. To obtain information about the characteristics of the entire sampleWe also assessed dominant hand, native language, grade level in school, and, for university students, their major. In total, participants answered 171 items, from which we obtain 33 measures for analysis.
+The whole survey was composed of general information, scales, and subscales previously validated, as well as two subscales constructed based on questions from validated scales (Social Touch and Movement Seeking). All scales that required answers on a Likert scale were converted to a 5-point scale to facilitate the completion of the survey. All questions were forced-choice (except for the Resistance to Peer Influence questionnaire), but participants had the option to answer "I do not wish to answer" or "I do not understand the question". They were also invited to leave any comments/remarks at the end of the questionnaire. To gather information about survey distribution, we collected data on how individuals enrolled in the study and postal codes. We also assessed dominant hand, native language, grade level in school, and, for university students, their major. In total, participants answered 171 items, from which we obtain 33 measures for analysis.
 
 #### General information
 

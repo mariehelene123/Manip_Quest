@@ -1,9 +1,7 @@
-################################################################
-#####                                                      #####
-#####         ANALYSE ADO BODY CONSCIOUSNESS               #####
-#####                       network analysis SCRIPTS       #####
-#####                                                      #####
-################################################################
+                                      
+#       ANALYSE ADO BODY CONSCIOUSNESS               
+#                      network analysis SCRIPTS       
+
 renv::activate()
 library(psych)
 #library(foreign)
@@ -38,10 +36,9 @@ miss_subscale_bcp<- read.csv("../../Share/Analyses/miss_subscale_bcp.csv")
 
 
 
+# VALIDITY AND CONSISTENCY ------------------------------
 
-#############
-###############
-################ VALIDITY AND CONSISTENCY 
+
 
 
 
@@ -372,9 +369,13 @@ active<- Item_bysub[,active_col]
 alpha(active,check.keys=TRUE) # 0.49 passage à  0.49 avec L1
 
 
-#############
-###############
-################ Missing values in data for analyses 
+
+
+
+
+
+
+# Deal Missing values   ------------------------------
 
 Measures_bysub<-read.csv("../../Share/Analyses/Measures_bysub.csv")
 
@@ -399,61 +400,13 @@ imputation <- mice(Measures_bysub, m= n_imputations, method = NULL, , ignore = N
 Measure_imputed<-complete(imputation)
 
 
-####Topological overlap analysis on data imputed for missing values
-gb_dataset<-goldbricker(
-  Measure_imputed,
-  p = 0.05,
-  method = "hittner2003",
-  threshold = 0.25,
-  corMin = 0.5,
-  progressbar = TRUE)
-
-Measure_Network0 <- net_reduce(data=Measure_imputed, badpairs=gb_dataset,method=c("best_goldbricker"))
-
-gb_red_nodes1<-goldbricker(
-  Measure_Network0,
-  p = 0.05,
-  method = "hittner2003",
-  threshold = 0.25,
-  corMin = 0.5,
-  progressbar = TRUE)
-
-Measure_Network <- net_reduce(data=Measure_Network0, badpairs=gb_red_nodes1,method=c("best_goldbricker"))
-#supp_overlap_imputed<-setdiff(names(Measure_imputed), names(Measure_Network))
-
-####Topological overlap analysis on data non imputed (with missing values)
-gb_dataset_raw<-goldbricker(
-  Measures_bysub,
-  p = 0.05,
-  method = "hittner2003",
-  threshold = 0.25,
-  corMin = 0.5,
-  progressbar = TRUE)
-
-Measure_Network_raw <- net_reduce(data=Measures_bysub, badpairs=gb_dataset_raw,method=c("best_goldbricker"))
-
-gb_red_nodes1_raw<-goldbricker(
-  Measure_Network_raw,
-  p = 0.05,
-  method = "hittner2003",
-  threshold = 0.25,
-  corMin = 0.5,
-  progressbar = TRUE)
-Measure_Network_raw <- net_reduce(data=Measure_Network_raw, badpairs=gb_red_nodes1_raw,method=c("best_goldbricker"))
-
-supp_overlap_raw<-setdiff(names(Measures_bysub), names(Measure_Network_raw))
 
 
 
-##Remmetre les mesures réduite au bon endroit
-Measure_Network<-Measure_Network %>% select(order(colnames(Measure_Network)))
 
-Measure_Network_raw<-Measure_Network_raw %>% select(order(colnames(Measure_Network_raw)))
-
-
-
-###############
-#############analyse lm 
+###
+##
+# analyse lm --------------------------------
 
 library(ggeffects)
 ############D_cons_soi
@@ -573,19 +526,90 @@ plot(modtoplot,rawdata = TRUE)
 
 
 
+# Topological overlap analysis ---------------------------------
+
+##### on data imputed for missing values
+
+
+gb_dataset<-goldbricker(
+  Measure_imputed,
+  p = 0.05,
+  method = "hittner2003",
+  threshold = 0.30,
+  corMin = 0.5,
+  progressbar = TRUE)
+
+Measure_Network0 <- net_reduce(data=Measure_imputed, badpairs=gb_dataset,method=c("best_goldbricker"))
+
+gb_red_nodes1<-goldbricker(
+  Measure_Network0,
+  p = 0.05,
+  method = "hittner2003",
+  threshold = 0.30,
+  corMin = 0.5,
+  progressbar = TRUE)
+
+
+if (gb_red_nodes1$suggested_reductions == "No suggested reductions") {
+  Measure_Network <- Measure_Network0
+} else {
+  Measure_Network <- net_reduce(data = Measure_Network0, badpairs = gb_red_nodes1, method = c("best_goldbricker"))
+  
+  gb_red_nodes2<-goldbricker(
+    Measure_Network,
+    p = 0.05,
+    method = "hittner2003",
+    threshold = 0.30,
+    corMin = 0.5,
+    progressbar = TRUE)
+  
+}
+
+#supp_overlap_imputed<-setdiff(names(Measure_imputed), names(Measure_Network))
+
+
+##Remmetre les mesures réduite au bon endroit
+Measure_Network<-Measure_Network %>% select(order(colnames(Measure_Network)))
+
+####utiliser dans raw seulement les colonnes qui reste après overlap
+
+
+Measure_Network_col<- colnames(Measure_Network)
+Measure_Network_raw <- Measures_bysub[, intersect(Measure_Network_col, colnames(Measures_bysub))]
 
 
 
 
+#!!!ici on va plutot utiliser le meme goldbricker que sur les data imputed pour garder les même variables
+#Measure_Network_raw <- net_reduce(data=Measures_bysub, badpairs=gb_dataset,method=c("best_goldbricker"))
+"""
+gb_dataset_raw<-goldbricker(
+  Measures_bysub,
+  p = 0.05,
+  method = 'hittner2003',
+  threshold = 0.25,
+  corMin = 0.5,
+  progressbar = TRUE)
+
+gb_red_nodes1_raw<-goldbricker(
+  Measure_Network_raw,
+  p = 0.05,
+  method = 'hittner2003',
+  threshold = 0.25,
+  corMin = 0.5,
+  progressbar = TRUE)
 
 
+### 
+#ici ca va dépendre de ce qui sest passé au dessus pour les data imputed pour garder les mêmes variables
+#Measure_Network_raw <- net_reduce(data=Measure_Network_raw, badpairs=gb_red_nodes1_raw,method=c('best_goldbricker'))
+# supp_overlap_raw<-setdiff(names(Measures_bysub), names(Measure_Network_raw))
+"""
+
+
+# Noms--------------------------------
 
 ####Renommers measures
-
-
-
-
-
 
 names_list_pairs<- c("A1_sexe","Sex","Sex ", 'General',
                       "A2_diff", "Cisgender", "Cis", 'General',
@@ -630,7 +654,7 @@ for (col in names(Measure_Network)) {
   }
 
 for (col in names(Measure_Network_raw)) {
-  index <- which(names_list_pairs == col)[1]
+ index <- which(names_list_pairs == col)[1]
   index_new<-(index+1)
   new_name<-names_list_pairs[index_new]
   colnames(Measure_Network_raw)[which(names(Measure_Network_raw) == col)] <- new_name
@@ -645,74 +669,148 @@ for (col in names(Measure_Network_raw)) {
 #}
 
 
-
+# WHOLE net Age -------------------
+ 
 ###SUPPRESSION DES MESURES POUR NETWORK!!!!!!!!!!!!!!
 
-Measure_final<-subset(Measure_Network, select = - c(Puberty))
-names(Measure_final)
+Measure_final_age<-subset(Measure_Network, select = - c(Puberty))
+names(Measure_final_age)
 
-Measure_final_raw<-subset(Measure_Network_raw, select = - c(Puberty))
-names(Measure_final_raw)
+Measure_final_raw_age<-subset(Measure_Network_raw, select = - c(Puberty))
+names(Measure_final_raw_age)
 
 
 ### POUR OBTENIR GR1 index et nom de group
 
-longnamesnodes<-names(Measure_final)
-shortnames_nodes<- list()
+longnamesnodes_age<-names(Measure_final_age)
+shortnames_nodes_age<- list()
 for (col in names(Measure_final)) {
   index <- which(names_list_pairs == col)[1]
   index_new<-(index+1)
   new_name<-names_list_pairs[index_new][1]
-  shortnames_nodes<-append(shortnames_nodes, new_name[1])
+  shortnames_nodes_age<-append(shortnames_nodes_age, new_name[1])
 }
 
-names_groups_tot<- list()
+names_groups_tot_age<- list()
 for (col in names(Measure_final)) {
   index <- which(names_list_pairs == col)[1]
   index_new<-(index+2)
   new_name<-names_list_pairs[index_new][1]
-  names_groups_tot<-append(names_groups_tot, new_name[1])
+  names_groups_tot_age<-append(names_groups_tot_age, new_name[1])
   }
 
-names_groups_unique<-unique(names_groups_tot)
-grSub1 <- split(x = 1:length(names_groups_tot), f = unlist(names_groups_tot))
+names_groups_unique_age<-unique(names_groups_tot_age)
+grSub1_age <- split(x = 1:length(names_groups_tot_age), f = unlist(names_groups_tot_age))
 
-
-
-#############
-#############
-
-###########Network Analysis whole sample
 
 ### Make correlation matrix
-cor_tot<-cor(Measure_final) #compute the correlation Matrix
-Measure_final.cor<-cor_auto(Measure_final) #compute the correlation Matrix with qgraph Packages 
+cor_tot_age<-cor(Measure_final_age) #compute the correlation Matrix
+Measure_final_age.cor<-cor_auto(Measure_final_age) #compute the correlation Matrix with qgraph Packages 
 
-cor_tot_raw<-cor(Measure_final_raw) #compute the correlation Matrix
-Measure_final.cor_raw<-cor_auto(Measure_final_raw) #compute the correlation Matrix with qgraph Packages 
+cor_tot_raw_age<-cor(Measure_final_raw_age) #compute the correlation Matrix
+Measure_final_age.cor_raw<-cor_auto(Measure_final_raw_age) #compute the correlation Matrix with qgraph Packages 
 
 ##### Network analysis
 
 png("Figures_Quest/Network_Whole_imputed.png", width=2000, height=1400)
-graph_imputed<-qgraph(Measure_final.cor, graph="glasso", layout="spring",labels=shortnames_nodes,
-                 vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_final),
+graph_imputed_age<-qgraph(Measure_final_age.cor, graph="glasso", layout="spring",labels=shortnames_nodes_age,
+                 vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_final_age),
                  border.width=0.1, border.color="#a8a8a8", minimum=.03, 
-                 groups=grSub1, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
+                 groups=grSub1_age, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
                                         "#66c2a5", "#fc8d62", "#46f0f0", "#e78ac3"),title= "Whole sample Network",
                  legend=TRUE,legend.mode='style1',GLratio=2.5,layoutScale=1,legend.cex=0.8,
-                 nodeNames=longnamesnodes)
+                 nodeNames=longnamesnodes_age)
+dev.off()
+
+
+png("Figures_Quest/Network_Whole_raw.png", width=2000, height=1400)
+graph_raw_age<-qgraph(Measure_final_age.cor_raw, graph="glasso", layout="spring",labels=shortnames_nodes_age,
+                       vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_final),
+                       border.width=0.1, border.color="#a8a8a8", minimum=.03, 
+                       groups=grSub1_age, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
+                                              "#66c2a5", "#fc8d62", "#46f0f0", "#e78ac3"),title= "Whole sample Network",
+                       legend=TRUE,legend.mode='style1',GLratio=2.5,layoutScale=1,legend.cex=0.8,
+                       nodeNames=longnamesnodes_age)
+dev.off()
+
+
+### Centrality analysis
+
+png("Figures_Quest/Centrality_Whole_imputed_age.png", width=2000, height=1400)
+centrality_imputed<-centralityPlot(graph_imputed_age,include="All",orderBy = "Betweenness")
+dev.off()
+
+png("Figures_Quest/Centrality_Whole_raw_age.png", width=2000, height=1400)
+centrality_raw<-centralityPlot(graph_raw_age,include="All",orderBy = "Betweenness")
 dev.off()
 
 
 
-png("Figures_Quest/Network_Whole_raw.png", width=2000, height=1400)
-graph_raw<-qgraph(Measure_final.cor_raw, graph="glasso", layout="spring",labels=shortnames_nodes,
-                       vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_final),
-                       border.width=0.1, border.color="#a8a8a8", minimum=.03, 
-                       groups=grSub1, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
-                                              "#66c2a5", "#fc8d62", "#46f0f0", "#e78ac3"),title= "Whole sample Network",
-                       legend=TRUE,legend.mode='style1',GLratio=2.5,layoutScale=1,legend.cex=0.8,
-                       nodeNames=longnamesnodes)
+
+
+
+# WHOLE net Pub -------------------
+
+###SUPPRESSION DES MESURES POUR NETWORK!!!!!!!!!!!!!!
+
+Measure_final_pub<-subset(Measure_Network, select = - c(Age))
+names(Measure_final_pub)
+
+Measure_final_pub_raw<-subset(Measure_Network_raw, select = - c(Age))
+names(Measure_final_pub_raw)
+
+
+### POUR OBTENIR GR1 index et nom de group
+
+longnamesnodes_pub<-names(Measure_final_pub)
+shortnames_nodes_pub<- list()
+for (col in names(Measure_final_pub)) {
+  index <- which(names_list_pairs == col)[1]
+  index_new<-(index+1)
+  new_name<-names_list_pairs[index_new][1]
+  shortnames_nodes_pub<-append(shortnames_nodes_pub, new_name[1])
+}
+
+names_groups_tot_pub<- list()
+for (col in names(Measure_final_pub)) {
+  index <- which(names_list_pairs == col)[1]
+  index_new<-(index+2)
+  new_name<-names_list_pairs[index_new][1]
+  names_groups_tot_pub<-append(names_groups_tot_pub, new_name[1])
+}
+
+names_groups_unique_pub<-unique(names_groups_tot_pub)
+grSub1_pub <- split(x = 1:length(names_groups_tot_pub), f = unlist(names_groups_tot_pub))
+
+
+### Make correlation matrix
+cor_tot_pub<-cor(Measure_final_pub) #compute the correlation Matrix
+Measure_final_pub.cor<-cor_auto(Measure_final_pub) #compute the correlation Matrix with qgraph Packages 
+
+cor_tot_raw_pub<-cor(Measure_final_pub_raw) #compute the correlation Matrix
+Measure_final_pub.cor_raw<-cor_auto(Measure_final_pub_raw) #compute the correlation Matrix with qgraph Packages 
+
+##### Network analysis
+
+png("Figures_Quest/Network_Whole_imputed_pub.png", width=2000, height=1400)
+graph_imputed<-qgraph(Measure_final_pub.cor, graph="glasso", layout="spring",labels=shortnames_nodes_pub,
+                      vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_final_pub),
+                      border.width=0.1, border.color="#a8a8a8", minimum=.03, 
+                      groups=grSub1_pub, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
+                                             "#66c2a5", "#fc8d62", "#46f0f0", "#e78ac3"),title= "Whole sample Network",
+                      legend=TRUE,legend.mode='style1',GLratio=2.5,layoutScale=1,legend.cex=0.8,
+                      nodeNames=longnamesnodes_pub)
+dev.off()
+
+
+png("Figures_Quest/Network_Whole_raw_pub.png", width=2000, height=1400)
+graph_raw<-qgraph(Measure_final_pub.cor_raw, graph="glasso", layout="spring",labels=shortnames_nodes_pub,
+                  vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_final_pub),
+                  border.width=0.1, border.color="#a8a8a8", minimum=.03, 
+                  groups=grSub1_pub, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
+                                         "#66c2a5", "#fc8d62", "#46f0f0", "#e78ac3"),title= "Whole sample Network",
+                  legend=TRUE,legend.mode='style1',GLratio=2.5,layoutScale=1,legend.cex=0.8,
+                  nodeNames=longnamesnodes_pub)
 dev.off()
 
 
@@ -727,12 +825,54 @@ centrality_raw<-centralityPlot(graph_raw,include="All",orderBy = "Betweenness")
 dev.off()
 
 
-#############
-################
+
+
+# SEX network age -------------------
+
 ############# division analyse par sex 
 
-Measure_Fem<- Measure_Network[Measure_Network$Sex == 1, ]
-Measure_Mal<- Measure_Network[Measure_Network$Sex == 2, ]
+Measure_Fem<- Measure_final_age[Measure_final_age$Sex == 1, ]
+Measure_Mal<- Measure_final_age[Measure_final_age$Sex == 2, ]
+
+#Measure_final_age_col<- colnames(Measure_final_age)
+#Measure_Fem_0 <- Measure_Fem[, intersect(Measure_final_age_col, colnames(Measure_Fem))]
+#Measure_Mal_0 <- Measure_Mal[, intersect(Measure_final_age_col, colnames(Measure_Mal))]
+
+Measure_Fem_0<-subset(Measure_Fem, select = - c(Sex))
+Measure_Mal_0<-subset(Measure_Mal, select = - c(Sex))
+
+# ** Check de l'overlap --------------
+
+gb_dataset_mal<-goldbricker(
+  Measure_Mal_0,
+  p = 0.05,
+  method = "hittner2003",
+  threshold = 0.25,
+  corMin = 0.5,
+  progressbar = TRUE)
+
+Measure_Network_mal <- net_reduce(data=Measure_Mal, badpairs=gb_dataset_mal,method=c("best_goldbricker"))
+
+gb_dataset_fem<-goldbricker(
+  Measure_Fem_0,
+  p = 0.05,
+  method = "hittner2003",
+  threshold = 0.25,
+  corMin = 0.5,
+  progressbar = TRUE)
+
+Measure_Network_mal <- net_reduce(data=Measure_Mal, badpairs=gb_dataset_mal,method=c("best_goldbricker"))
+
+
+
+
+
+
+
+
+
+
+
 
 
 Measure_Fem<-subset(Measure_Fem, select = - c(Sex))
@@ -740,6 +880,9 @@ Measure_Fem.cor<-cor_auto(Measure_Fem) #compute the correlation Matrix with qgra
 
 Measure_Mal<-subset(Measure_Mal, select = - c(Sex))
 Measure_Mal.cor<-cor_auto(Measure_Mal) #compute the correlation Matrix with qgraph Packages 
+
+
+
 
 
 nodenames_sex<-names(Measure_Fem)
@@ -766,9 +909,10 @@ gr_sexe <- split(x = 1:length(names_groups_sex), f = unlist(names_groups_sex))
 
 
 png("Figures_Quest/Network_fem.png", width=2000, height=1400)
-graphFem1<-qgraph(Measure_Fem.cor, graph="glasso", layout="spring",labels=labels_sex,
-                  vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_Fem),
-                  border.width=0.1, border.color="#a8a8a8", minimum=.03, 
+graphFem<-qgraph(Measure_Fem.cor, graph="glasso", layout="spring",labels=labels_sex,
+                  maximum=.45,minimum=.03,tuning=0.25,
+                  vsize=7, cut=0,  sampleSize = nrow(Measure_Fem),
+                  border.width=0.1, border.color="#a8a8a8",  
                   groups=gr_sexe, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
                                            "#66c2a5", "#fc8d62", "#46f0f0", "#e78ac3"),title= "Whole sample Network",
                   legend=TRUE,legend.mode='style1',GLratio=2.5,layoutScale=1,legend.cex=0.8,
@@ -776,9 +920,10 @@ graphFem1<-qgraph(Measure_Fem.cor, graph="glasso", layout="spring",labels=labels
 dev.off()
 
 png("Figures_Quest/Network_mal.png", width=2000, height=1400)
-graphFem2<-qgraph(Measure_Mal.cor, graph="glasso", layout="spring",labels=labels_sex,
-                  vsize=7, cut=0, maximum=.45, sampleSize = nrow(Measure_Mal),
-                  border.width=0.1, border.color="#a8a8a8", minimum=.03, 
+graphMal<-qgraph(Measure_Mal.cor, graph="glasso", layout="spring",labels=labels_sex,
+                  maximum=.45,minimum=.03,tuning=0.25,
+                  vsize=7, cut=0,sampleSize = nrow(Measure_Mal),
+                  border.width=0.1, border.color="#a8a8a8", 
                   groups=gr_sexe, color=c("#377eb8", "#fb9a99", "#4daf4a", "#ffffbf", "#ff7f00", "#ffff33", "#bcf60c", "#c77cff", "#a65628", 
                                            "#66c2a5", "#fc8d62", "#46f0f0", "#e78ac3"),title= "Whole sample Network",
                   legend=TRUE,legend.mode='style1',GLratio=2.5,layoutScale=1,legend.cex=0.8,
@@ -1053,5 +1198,5 @@ summaryFem4vsFem5<-summary(NCTFem4vsFem5)
 
 
 
-save.image("../R_Env_Quest/Networkanalyse.RData")
+save.image("../R_Env_Quest/NetworkAnalyseTOUT.RData")
 

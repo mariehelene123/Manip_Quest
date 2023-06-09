@@ -6,14 +6,15 @@ authoryear]{elsarticle} %review=doublespace preprint=single 5p=2 column
 
   \journal{An awesome journal} % Sets Journal name
 
-\usepackage{lineno} % add
-
 \usepackage{graphicx}
 %%%%%%%%%%%%%%%% end my additions to header
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
+% TODO: Currently lineno needs to be loaded after amsmath because of conflict
+% https://github.com/latex-lineno/lineno/issues/5
+\usepackage{lineno} % add
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
 % use upquote if available, for straight quotes in verbatim environments
@@ -59,6 +60,7 @@ authoryear]{elsarticle} %review=doublespace preprint=single 5p=2 column
 
 
 
+
 \usepackage{xcolor}
 \usepackage{lmodern}
 \usepackage{soul}
@@ -94,10 +96,6 @@ psychometric network analysis}
   %
   }
    \ead{aaaa@univ-amu.fr} 
-    \author[INT]{Fabrice Sarlegna%
-  %
-  }
-   \ead{aaaaa@univ-amu.fr} 
     \author[LNC]{Marie-Hélène Grosbras%
   \corref{cor1}%
   }
@@ -107,8 +105,6 @@ de Neurosciences Cognitives, Marseille, France}
     \affiliation[INT]{Aix Marseille Universite, CNRS, INT, Institut de
 Neurosciences de la Timone, Marseille, France}
     \cortext[cor1]{Corresponding author}
-    \fntext[1]{This is the first author footnote.}
-    \fntext[2]{Another author footnote.}
   
   \begin{abstract}
   This is the abstract.
@@ -150,18 +146,17 @@ The whole survey was composed of general information, scales, and
 subscales previously validated, as well as two subscales constructed
 based on questions from validated scales (Social Touch and Movement
 Seeking). All scales that required answers on a Likert scale were
-converted to a 5-point scale (ranging from 1 to 5) to facilitate the
-completion of the survey. All questions were forced-choice (except for
-the Resistance to Peer Influence questionnaire), but participants had
-the option to answer ``I do not wish to answer'' or ``I do not
-understand the question''. They were also invited to leave any
-comments/remarks at the end of the questionnaire. To gather information
-about survey distribution, we collected data on how individuals enrolled
-in the study and their postal codes. To obtain information about the
-characteristics of the entire sampleWe also assessed dominant hand,
-native language, grade level in school, and, for university students,
-their major. In total, participants answered 171 items, from which we
-obtain 33 measures for analysis.
+converted to a 5-point scale to facilitate the completion of the survey.
+All questions were forced-choice (except for the Resistance to Peer
+Influence questionnaire), but participants had the option to answer ``I
+do not wish to answer'' or ``I do not understand the question''. They
+were also invited to leave any comments/remarks at the end of the
+questionnaire. To gather information about survey distribution, we
+collected data on how individuals enrolled in the study and postal
+codes. We also assessed dominant hand, native language, grade level in
+school, and, for university students, their major. In total,
+participants answered 171 items, from which we obtain 33 measures for
+analysis.
 
 \hypertarget{general-information}{%
 \paragraph{General information}\label{general-information}}
@@ -224,8 +219,8 @@ Likert scale range from ``extremely uncharacteristic of me'' (1) to
 ``extremely characteristic'' (5) with higher values indicating higher
 tendency to focus on oneself / be anxious. Internal consistency across
 all items in the present study (before imputation for missing data) was
-\(\alpha\) = 0.86. (Private SCS \(\alpha\) = 0.78, Public SCS \(\alpha\)
-= 0.84, Social Anxiety \(\alpha\) = 0.79)
+\(\alpha\) = 0.87. (Private SCS \(\alpha\) = 0.78, Public SCS \(\alpha\)
+= 0.85, Social Anxiety \(\alpha\) = 0.79)
 
 \hypertarget{perspective-taking-and-empathic-concern}{%
 \paragraph{Perspective Taking and Empathic
@@ -246,7 +241,7 @@ them.'') and is considered as a measure of Affective Empathy. The Likert
 scale range from ``this doesn't describe me at all'' (1) to ``this
 describes me very well'' (5) with higher values showing higher empathy.
 Internal consistency across all items in the present study was
-\(\alpha\) = 0.8. (Perspective Taking \(\alpha\) = 0.65, Empathic
+\(\alpha\) = 0.79. (Perspective Taking \(\alpha\) = 0.65, Empathic
 Concern \(\alpha\) = 0.78)
 
 \hypertarget{affective-behavioral-and-cognitive-engagement-in-social-media}{%
@@ -286,7 +281,7 @@ with higher scores indicating more positive feelings about appearance,
 greater weight satisfaction, and positive beliefs on how others perceive
 their bodies. Internal consistency across all items in the present study
 was \(\alpha\) = 0.92. (Appearance \(\alpha\) = 0.89, Weight \(\alpha\)
-= 0.92, Attribution \(\alpha\) = 0.55).
+= 0.92, Attribution \(\alpha\) = 0.56).
 
 \hypertarget{body-objectificiation}{%
 \paragraph{Body Objectificiation}\label{body-objectificiation}}
@@ -332,7 +327,7 @@ internal bodily sensations (e.g., ``I am sensitive to internal bodily
 tensions'). The Likert scale range from''extremely uncharacteristic of
 me'' (1) to ``extremely characteristic of me'' (5), with higher scores
 high sensitivity. Internal consistency across all items in the present
-study was \(\alpha\) = 0.67.
+study was \(\alpha\) = 0.68.
 
 \hypertarget{body-noticing-not-distracting-not-worrying-litstening-and-trustring-and-emotional-awareness-of-the-body}{%
 \paragraph{Body Noticing, not-distracting, not-worrying, litstening and
@@ -361,9 +356,9 @@ extent to which participants experiences their body as a `safe' and
 sensations''). The Likert scale range from ``Nerver'' (1) to ``Always''
 (5), with higher scores indicating greater felt pressure. Internal
 consistency across all items in the present study was \(\alpha\) = 0.76.
-(Noticing \(\alpha\) = 0.67, Not-Distracting \(\alpha\) = 0.66,
-Not-Worrying \(\alpha\) = 0.56, Emotional Awareness \(\alpha\) = 0.79,
-Body Listening \(\alpha\) = 0.77, Body Trusting \(\alpha\) = 0.79).
+(Noticing \(\alpha\) = 0.68, Not-Distracting \(\alpha\) = 0.66,
+Not-Worrying \(\alpha\) = 0.55, Emotional Awareness \(\alpha\) = 0.79,
+Body Listening \(\alpha\) = 0.78, Body Trusting \(\alpha\) = 0.79).
 
 \hypertarget{resistance-to-peer-influence}{%
 \paragraph{Resistance To Peer
@@ -378,7 +373,7 @@ True''.Responses are then coded on a 4-point scale, ranging from
 ``really true'' for one descriptor to ``really true'' for the other
 descriptor, and averaged. Higher scores indicate greater resistance to
 peer influence. Internal consistency across all items in the present
-study was \(\alpha\) = 0.67.
+study was \(\alpha\) = 0.68.
 
 \hypertarget{social-touch}{%
 \paragraph{Social Touch}\label{social-touch}}
@@ -412,7 +407,7 @@ items related to sensory processing of Touch, Movement, and Activity
 Level (the original version cover also sensory processing of taste/
 smell, visual and audition). In the present study, internal consistency
 across items related to sensitivity threshold was \(\alpha\) = 0.69 and,
-across those related to behavioral response, was \(\alpha\) = 0.44.
+across those related to behavioral response, was \(\alpha\) = 0.45.
 
 \hypertarget{data-analyses}{%
 \subsection{Data Analyses}\label{data-analyses}}
@@ -425,33 +420,34 @@ assessment recommended by \citet{tomei_network_2022} and
 \hypertarget{preprocessing}{%
 \subsubsection{Preprocessing}\label{preprocessing}}
 
-Data were prepossessed using python and R. On the 777 participants that
-completed the survey until the end, we deleted 67 that answer ``I do not
+Data were prepossessed using python and R. On the 815 participants that
+completed the survey until the end, we deleted 75 that answer ``I do not
 which to answer'' or ``I don't understand the question'' more than 17
 times (10\% of the items). Based on visual check of commentary and
 pattern response, 4 datasets were also deleted. Following analyses were
-thus performed on 706 participants.
+thus performed on 736 participants.
 
 \hypertarget{missing-data-for-network-analysis}{%
 \paragraph{Missing Data for network
 analysis}\label{missing-data-for-network-analysis}}
 
-In the raw items of final sample, 3.72\% of the data was missing. When
+In the raw items of final sample, 3.79\% of the data was missing. When
 missing values was part of a multi-item measure, the measure was
 calculated using the mean of the answered items only. Table ?? reports
 the percentage of missing data for each item. Regarding the measures
-used for network analyses, 1.09\% of the data was missing. 4 measures
-had more than one percent of missing values: Physical activity (3.8\%),
-number of chronic pain (13.7\%), economic status (2.7\%) and resistance
-to peer influence (13.9\%). The first three were mostly related to a
+used for network analyses, 1.12\% of the data was missing. 4 measures
+had more than one percent of missing values: Physical activity (3.7\%),
+number of chronic pain (13.6\%), economic status (2.9\%) and resistance
+to peer influence (14.8\%). The first three were mostly related to a
 misunderstanding of the question. The resistance to peer influence
 missing rate was mostly related to mistakes in the completion procedure
 (answering in the two rather than only one subgroups). Little's MCAR
-test was statistically significant (X²(832) = 1048.44, p \textless{}
+test was statistically significant (X²(864) = 1080.65, p \textless{}
 0.001), indicating data was not missing completely at random (MCAR).
 Missing data were handled using multivariate imputation by chained
 equations also known fully conditional specification, conducted using
-the mice package in R \citep{buuren_mice_2011}.
+the mice package in R \citep{buuren_mice_2011}. (See supplementary
+results for Whole sample analysis on data withou imputation).
 
 \hypertarget{measure-selection}{%
 \paragraph{Measure selection}\label{measure-selection}}
@@ -467,13 +463,27 @@ condition would influence the network architecture and inflate
 centrality metrics of the nodes \citep{mcnally_network_2021}. After
 applying goldbricker Private\_Body\_consciousness and
 Noticing\_body\_sensations were removed. The Final Network therefore
-comprised 31 measures.
+comprised 32 measures.
 
 \hypertarget{network-analysis}{%
 \subsubsection{Network Analysis}\label{network-analysis}}
 
 \hypertarget{network-estimation}{%
 \paragraph{Network estimation}\label{network-estimation}}
+
+We estimate network using a partial correlation graphical least absolute
+shrinkage and selection operator (GLASSO) estimator using qgraph.
+
+Regularized partial correlation networks (GLASSO networks) estimate
+edges (i.e., the partial correlation between two nodes) that are likely
+to be spurious as zero, leading to a more parsimonious and theoretically
+more accurate network (Epskamp \& Fried, 2018). Correlations between
+nodes in GLASSO networks represent unique partial relationships among
+symptoms while accounting for all symptoms in the network. The initial
+networks were estimated using polychoric correlations. The resulting
+network was dense and had several unexpected negative edges. Thus, per
+recommendation of Epskamp and Fried (2018), we used Spearman
+correlations in our final analysis.
 
 \hypertarget{network-stability-and-accuracy-check}{%
 \paragraph{Network stability and accuracy
@@ -519,6 +529,12 @@ Centrality}\label{network-topology-and-centrality}}
 
 \hypertarget{group-comparison}{%
 \subsection{Group Comparison}\label{group-comparison}}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+rates of onset for several forms of psychopathology peak during
+adolescence, \citep{guyer_adolescent_2020}.
 
 \renewcommand\refname{References}
 \bibliography{bibthese.bib}
